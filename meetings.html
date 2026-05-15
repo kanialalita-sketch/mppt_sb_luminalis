@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meeting Notes - Prodia QA Transformation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        /* Navigation */
+        nav {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+        
+        .logo-icon {
+            font-size: 24px;
+        }
+        
+        .logo-text h1 {
+            font-size: 18px;
+            color: #2c3e50;
+            margin: 0;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 25px;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            color: #2c3e50;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            transition: color 0.3s;
+            padding: 8px 12px;
+            border-radius: 4px;
+        }
+        
+        .nav-links a:hover {
+            color: #3498db;
+            background: #f8f9fa;
+        }
+        
+        .nav-links a.active {
+            color: #3498db;
+            background: #e3f2fd;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        
+        .header {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+        
+        .ceremony-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .ceremony-card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .ceremony-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+        
+        .ceremony-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+        }
+        
+        .ceremony-title {
+            font-size: 22px;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .ceremony-meta {
+            font-size: 13px;
+            color: #7f8c8d;
+            margin-bottom: 15px;
+        }
+        
+        .ceremony-description {
+            color: #34495e;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            overflow-y: auto;
+            padding: 40px 20px;
+        }
+        
+        .modal-content {
+            background: white;
+            max-width: 1000px;
+            margin: 0 auto;
+            border-radius: 12px;
+            padding: 50px;
+            position: relative;
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 25px;
+            right: 25px;
+            font-size: 32px;
+            cursor: pointer;
+            color: #95a5a6;
+            background: none;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+        
+        .modal-close:hover {
+            background: #f8f9fa;
+            color: #2c3e50;
+        }
+        
+        .modal h2 {
+            color: #2c3e50;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        
+        .modal h3 {
+            color: #2c3e50;
+            font-size: 20px;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #ecf0f1;
+        }
+        
+        .modal h4 {
+            color: #34495e;
+            font-size: 16px;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        
+        .modal p {
+            color: #7f8c8d;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+        
+        .modal ul {
+            margin-left: 25px;
+            margin-bottom: 15px;
+        }
+        
+        .modal li {
+            color: #34495e;
+            line-height: 1.8;
+            margin-bottom: 8px;
+        }
+        
+        .example-box {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #3498db;
+        }
+        
+        .example-box h4 {
+            color: #2c3e50;
+            margin-top: 0;
+        }
+        
+        .team-member {
+            background: white;
+            border: 1px solid #ecf0f1;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+        }
+        
+        .team-member-name {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            font-size: 15px;
+        }
+        
+        .section-label {
+            font-size: 12px;
+            color: #7f8c8d;
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-top: 10px;
+            margin-bottom: 5px;
+        }
+        
+        .highlight {
+            background: #fff3cd;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ecf0f1;
+        }
+        
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .action-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            margin-bottom: 8px;
+        }
+        
+        .action-checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #3498db;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <div class="logo-icon">🚀</div>
+                <div class="logo-text">
+                    <h1>Prodia QA Transformation</h1>
+                </div>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="burndown.html">Burndown Charts</a></li>
+                <li><a href="kanban.html">Kanban Board</a></li>
+                <li><a href="backlog.html">Product Backlog</a></li>
+                <li><a href="meetings.html" class="active">Meeting Notes</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <div class="header">
+            <h1>📅 Meeting Notes & Agile Ceremonies</h1>
+            <p>Template dan dokumentasi lengkap untuk semua Agile ceremonies yang digunakan dalam proyek</p>
+        </div>
+        
+        <div class="ceremony-grid">
+            <div class="ceremony-card" onclick="showCeremony('standup')">
+                <div class="ceremony-icon">🌅</div>
+                <h3 class="ceremony-title">Daily Standup</h3>
+                <p class="ceremony-meta">⏱️ 15 menit • 📅 Setiap hari kerja</p>
+                <p class="ceremony-description">
+                    Meeting harian untuk sinkronisasi tim, membahas progress kemarin, 
+                    rencana hari ini, dan blockers yang dihadapi.
+                </p>
+            </div>
+            
+            <div class="ceremony-card" onclick="showCeremony('planning')">
+                <div class="ceremony-icon">📋</div>
+                <h3 class="ceremony-title">Sprint Planning</h3>
+                <p class="ceremony-meta">⏱️ 4 jam • 📅 Awal setiap sprint</p>
+                <p class="ceremony-description">
+                    Perencanaan sprint untuk menentukan sprint goal, memilih user stories, 
+                    dan breakdown tasks dengan estimasi.
+                </p>
+            </div>
+            
+            <div class="ceremony-card" onclick="showCeremony('review')">
+                <div class="ceremony-icon">🎯</div>
+                <h3 class="ceremony-title">Sprint Review</h3>
+                <p class="ceremony-meta">⏱️ 2 jam • 📅 Akhir setiap sprint</p>
+                <p class="ceremony-description">
+                    Demo hasil sprint kepada stakeholders, gathering feedback, 
+                    dan review product backlog untuk sprint berikutnya.
+                </p>
+            </div>
+            
+            <div class="ceremony-card" onclick="showCeremony('retro')">
+                <div class="ceremony-icon">🔄</div>
+                <h3 class="ceremony-title">Sprint Retrospective</h3>
+                <p class="ceremony-meta">⏱️ 1.5 jam • 📅 Setelah Sprint Review</p>
+                <p class="ceremony-description">
+                    Refleksi proses kerja sprint dengan format Start-Stop-Continue 
+                    untuk continuous improvement.
+                </p>
+            </div>
+            
+            <div class="ceremony-card" onclick="showCeremony('refinement')">
+                <div class="ceremony-icon">✨</div>
+                <h3 class="ceremony-title">Backlog Refinement</h3>
+                <p class="ceremony-meta">⏱️ 1 jam • 📅 Mid-sprint (2 minggu sekali)</p>
+                <p class="ceremony-description">
+                    Grooming user stories untuk sprint berikutnya, clarify acceptance criteria, 
+                    dan estimasi story points.
+                </p>
+            </div>
+            
+            <div class="ceremony-card" onclick="showCeremony('release')">
+                <div class="ceremony-icon">🚀</div>
+                <h3 class="ceremony-title">Release Planning</h3>
+                <p class="ceremony-meta">⏱️ 3 jam • 📅 Quarterly</p>
+                <p class="ceremony-description">
+                    Perencanaan release dengan timeline, features roadmap, 
+                    dan coordination antar sprints untuk deliverables.
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modals for each ceremony -->
+    <div id="standupModal" class="modal" onclick="closeModal('standup', event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeModal('standup')">&times;</button>
+            <h2>🌅 Daily Standup Meeting</h2>
+            <p class="ceremony-meta">⏱️ Duration: 15 menit • 📅 Frequency: Setiap hari kerja • 👥 Participants: Development Team</p>
+            
+            <h3>Meeting Format</h3>
+            <p>Setiap anggota tim menjawab 3 pertanyaan:</p>
+            <ol>
+                <li><strong>What did I accomplish yesterday?</strong></li>
+                <li><strong>What will I do today?</strong></li>
+                <li><strong>Are there any impediments in my way?</strong></li>
+            </ol>
+            
+            <h3>Example: Daily Standup Log - Sprint 1, Day 1</h3>
+            <p><strong>Date:</strong> 1 Mei 2026</p>
+            
+            <div class="team-member">
+                <div class="team-member-name">Budi (DevOps Engineer)</div>
+                <div class="section-label">Yesterday:</div>
+                <p>• Reviewed Jenkins installation requirements<br>• Prepared server specifications document</p>
+                <div class="section-label">Today:</div>
+                <p>• Begin Jenkins server installation<br>• Configure initial build agents</p>
+                <div class="section-label">Blockers:</div>
+                <p>⚠️ Waiting for server access credentials from IT Infra</p>
+            </div>
+            
+            <div class="team-member">
+                <div class="team-member-name">Sari (QA Lead)</div>
+                <div class="section-label">Yesterday:</div>
+                <p>• Reviewed test strategy frameworks<br>• Analyzed current testing gaps</p>
+                <div class="section-label">Today:</div>
+                <p>• Start drafting test strategy document<br>• Schedule meeting with stakeholders</p>
+                <div class="section-label">Blockers:</div>
+                <p>✅ None</p>
+            </div>
+            
+            <div class="team-member">
+                <div class="team-member-name">Doni (Developer)</div>
+                <div class="section-label">Yesterday:</div>
+                <p>• Code review for Module A<br>• Fixed 3 critical bugs</p>
+                <div class="section-label">Today:</div>
+                <p>• Continue unit test development<br>• Prepare for SonarQube integration</p>
+                <div class="section-label">Blockers:</div>
+                <p>⚠️ Need clarification on test coverage requirements</p>
+            </div>
+            
+            <h3>Action Items</h3>
+            <div class="action-item">
+                <div class="action-checkbox"></div>
+                <div>PM to follow up on server credentials for Budi</div>
+            </div>
+            <div class="action-item">
+                <div class="action-checkbox"></div>
+                <div>QA Lead to clarify test coverage standards with Doni</div>
+            </div>
+            <div class="action-item">
+                <div class="action-checkbox"></div>
+                <div>All: Review test strategy draft by end of week</div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="planningModal" class="modal" onclick="closeModal('planning', event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeModal('planning')">&times;</button>
+            <h2>📋 Sprint Planning Meeting</h2>
+            <p class="ceremony-meta">⏱️ Duration: 4 jam • 📅 Frequency: Awal setiap sprint • 👥 Participants: PO, SM, Dev Team</p>
+            
+            <h3>Agenda</h3>
+            
+            <h4>Part 1: What can we deliver? (2 hours)</h4>
+            <ol>
+                <li>Review Product Backlog</li>
+                <li>Define Sprint Goal</li>
+                <li>Select User Stories for Sprint</li>
+                <li>Estimate Team Velocity</li>
+                <li>Commit to Sprint Backlog</li>
+            </ol>
+            
+            <h4>Part 2: How will we do it? (2 hours)</h4>
+            <ol>
+                <li>Break down User Stories into Tasks</li>
+                <li>Assign Story Points</li>
+                <li>Identify Dependencies</li>
+                <li>Assign Tasks to Team Members</li>
+                <li>Finalize Sprint Backlog</li>
+            </ol>
+            
+            <h3>Sprint 1 Planning Output</h3>
+            
+            <div class="example-box">
+                <h4>Sprint Goal</h4>
+                <p>"Membangun fondasi infrastruktur CI/CD dan melakukan onboarding tools utama untuk mendukung automated testing dan quality assurance"</p>
+            </div>
+            
+            <p><strong>Sprint Duration:</strong> Mei - Juni 2026 (8 minggu)</p>
+            <p><strong>Team Velocity:</strong> 39 Story Points (estimasi)</p>
+            
+            <h4>Selected User Stories:</h4>
+            <ul>
+                <li>✓ US-001: Setup Jenkins CI/CD Pipeline (13 SP)</li>
+                <li>✓ US-002: Configure GitLab CI/CD Integration (8 SP)</li>
+                <li>✓ US-003: Design Test Strategy & Framework (5 SP)</li>
+                <li>✓ US-004: Onboarding QA Tools (8 SP)</li>
+                <li>✓ US-005: Training Batch 1 (5 SP)</li>
+            </ul>
+            <p><strong>Total Committed:</strong> <span class="highlight">39 Story Points</span></p>
+            
+            <h4>Definition of Done for Sprint 1:</h4>
+            <ul>
+                <li>✓ Jenkins pipeline operational</li>
+                <li>✓ GitLab CI/CD integrated</li>
+                <li>✓ Test strategy documented</li>
+                <li>✓ QA tools configured</li>
+                <li>✓ Team trained on shift-left testing</li>
+            </ul>
+            
+            <h4>Risks Identified:</h4>
+            <ul>
+                <li>⚠️ Server access delays may impact Jenkins setup</li>
+                <li>⚠️ Tool licensing approval pending</li>
+                <li>⚠️ Team availability during training period</li>
+            </ul>
+        </div>
+    </div>
+    
+    <div id="reviewModal" class="modal" onclick="closeModal('review', event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeModal('review')">&times;</button>
+            <h2>🎯 Sprint Review Meeting</h2>
+            <p class="ceremony-meta">⏱️ Duration: 2 jam • 📅 Frequency: Akhir setiap sprint • 👥 Participants: Scrum Team, Stakeholders, PO</p>
+            
+            <h3>Agenda</h3>
+            <ol>
+                <li>Sprint Overview (10 min)</li>
+                <li>Demo Completed Work (60 min)</li>
+                <li>Discuss What Went Well (20 min)</li>
+                <li>Discuss Challenges (20 min)</li>
+                <li>Product Backlog Review (20 min)</li>
+                <li>Next Steps (10 min)</li>
+            </ol>
+            
+            <h3>Sprint 1 Review Results</h3>
+            
+            <p><strong>Completed Stories:</strong> <span class="highlight">5/5 (100%)</span></p>
+            <p><strong>Story Points Delivered:</strong> <span class="highlight">39/39 (100%)</span></p>
+            
+            <h4>Demonstrations:</h4>
+            
+            <div class="example-box">
+                <h4>1. ✅ Jenkins Pipeline Demo</h4>
+                <ul>
+                    <li>Automated build process</li>
+                    <li>Integration with Git repository</li>
+                    <li>Build notifications working</li>
+                </ul>
+            </div>
+            
+            <div class="example-box">
+                <h4>2. ✅ GitLab CI/CD Demo</h4>
+                <ul>
+                    <li>Pipeline stages configured</li>
+                    <li>Automated testing on commit</li>
+                    <li>Deployment to staging environment</li>
+                </ul>
+            </div>
+            
+            <div class="example-box">
+                <h4>3. ✅ Test Strategy Presentation</h4>
+                <ul>
+                    <li>Test pyramid defined</li>
+                    <li>Quality gates established</li>
+                    <li>Metrics framework ready</li>
+                </ul>
+            </div>
+            
+            <h4>Stakeholder Feedback:</h4>
+            <ul>
+                <li>👍 "Impressed with pipeline automation speed"</li>
+                <li>👍 "Test strategy aligns well with business goals"</li>
+                <li>🤔 "Need more focus on security testing in next sprint"</li>
+            </ul>
+            
+            <h4>Product Backlog Updates:</h4>
+            <ul>
+                <li>Added: Enhanced security scanning requirements</li>
+                <li>Reprioritized: Performance testing moved to Sprint 4</li>
+                <li>Removed: Legacy system integration (out of scope)</li>
+            </ul>
+        </div>
+    </div>
+    
+    <div id="retroModal" class="modal" onclick="closeModal('retro', event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeModal('retro')">&times;</button>
+            <h2>🔄 Sprint Retrospective</h2>
+            <p class="ceremony-meta">⏱️ Duration: 1.5 jam • 📅 Frequency: Setelah Sprint Review • 👥 Participants: Dev Team, SM</p>
+            
+            <h3>Format: Start-Stop-Continue</h3>
+            
+            <h3>Sprint 1 Retrospective Results</h3>
+            <p><strong>Date:</strong> 30 Juni 2026</p>
+            
+            <h4>START (What should we start doing?)</h4>
+            <div class="example-box">
+                <p><strong>✅ Start peer code reviews before merging</strong></p>
+                <p>Rationale: Caught several bugs late in sprint<br>
+                Action: Implement mandatory 2-reviewer approval<br>
+                Owner: Tech Lead • Due: Before Sprint 2 starts</p>
+            </div>
+            
+            <div class="example-box">
+                <p><strong>✅ Start daily automated smoke tests</strong></p>
+                <p>Rationale: Integration issues detected late<br>
+                Action: Configure nightly test runs<br>
+                Owner: QA Lead • Due: Week 1 Sprint 2</p>
+            </div>
+            
+            <h4>STOP (What should we stop doing?)</h4>
+            <div class="example-box">
+                <p><strong>❌ Stop late-sprint large commits</strong></p>
+                <p>Issue: Hard to review, risky deployments<br>
+                Action: Enforce commit size limits<br>
+                Owner: Scrum Master • Due: Immediate</p>
+            </div>
+            
+            <div class="example-box">
+                <p><strong>❌ Stop skipping unit tests for "quick fixes"</strong></p>
+                <p>Issue: Technical debt accumulation<br>
+                Action: Block merges without tests<br>
+                Owner: DevOps (Pipeline config) • Due: Week 1 Sprint 2</p>
+            </div>
+            
+            <h4>CONTINUE (What's working well?)</h4>
+            <ul>
+                <li>✔ Daily standups at 9 AM - Good team sync, blockers resolved quickly</li>
+                <li>✔ Weekly stakeholder updates - Keeps management informed and supportive</li>
+                <li>✔ Pair programming for complex features - Knowledge sharing, fewer bugs</li>
+                <li>✔ Slack channels for async communication - Reduces meeting overhead</li>
+            </ul>
+            
+            <h3>Metrics Review</h3>
+            <table>
+                <tr>
+                    <th>Metric</th>
+                    <th>Target</th>
+                    <th>Actual</th>
+                    <th>Status</th>
+                </tr>
+                <tr>
+                    <td>Sprint Velocity</td>
+                    <td>39 SP</td>
+                    <td>39 SP</td>
+                    <td>✅</td>
+                </tr>
+                <tr>
+                    <td>Completion Rate</td>
+                    <td>90%</td>
+                    <td>100%</td>
+                    <td>✅</td>
+                </tr>
+                <tr>
+                    <td>Code Coverage</td>
+                    <td>80%</td>
+                    <td>78%</td>
+                    <td>⚠️</td>
+                </tr>
+                <tr>
+                    <td>Deployment Success</td>
+                    <td>90%</td>
+                    <td>95%</td>
+                    <td>✅</td>
+                </tr>
+                <tr>
+                    <td>Team Satisfaction</td>
+                    <td>4.0/5</td>
+                    <td>4.3/5</td>
+                    <td>✅</td>
+                </tr>
+            </table>
+            
+            <h4>Team Happiness Metric (1-5 scale):</h4>
+            <p>Average: <span class="highlight">4.3/5</span></p>
+            <ul>
+                <li>Budi (DevOps): ⭐⭐⭐⭐⭐ (5)</li>
+                <li>Sari (QA Lead): ⭐⭐⭐⭐☆ (4)</li>
+                <li>Doni (Developer): ⭐⭐⭐⭐☆ (4)</li>
+                <li>Rina (Security): ⭐⭐⭐⭐⭐ (5)</li>
+                <li>Andi (Developer): ⭐⭐⭐⭐☆ (4)</li>
+                <li>Maya (QA): ⭐⭐⭐⭐☆ (4)</li>
+            </ul>
+        </div>
+    </div>
+    
+    <div id="refinementModal" class="modal" onclick="closeModal('refinement', event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeModal('refinement')">&times;</button>
+            <h2>✨ Backlog Refinement</h2>
+            <p class="ceremony-meta">⏱️ Duration: 1 jam • 📅 Frequency: Mid-sprint (2 minggu sekali) • 👥 Participants: PO, Tech Lead, QA Lead</p>
+            
+            <h3>Agenda</h3>
+            <ol>
+                <li>Review upcoming user stories</li>
+                <li>Clarify acceptance criteria</li>
+                <li>Estimate story points</li>
+                <li>Identify dependencies</li>
+                <li>Prioritize backlog items</li>
+            </ol>
+            
+            <h3>Sprint 2 Backlog Refinement</h3>
+            <p><strong>Date:</strong> 15 Juli 2026</p>
+            
+            <p><strong>Stories Reviewed:</strong> 8</p>
+            <p><strong>Stories Estimated:</strong> 6</p>
+            <p><strong>Stories Ready for Sprint:</strong> 6</p>
+            
+            <h4>Ready for Sprint 2:</h4>
+            <ul>
+                <li>✓ US-006: Shift-Left Testing Module A (13 SP) - READY</li>
+                <li>✓ US-007: Automated Unit Tests (13 SP) - READY</li>
+                <li>✓ US-008: SonarQube Integration (8 SP) - READY</li>
+                <li>✓ US-009: Code Review Workflow (5 SP) - READY</li>
+                <li>✓ US-010: Coding Standards (3 SP) - READY</li>
+                <li>✓ US-011: Test Documentation (2 SP) - READY</li>
+            </ul>
+            
+            <h4>Needs More Info:</h4>
+            <div class="example-box">
+                <p><strong>⚠️ US-012: Performance Testing Framework</strong></p>
+                <p>• Waiting for tool selection decision<br>
+                • Dependency on Sprint 1 completion</p>
+            </div>
+            
+            <div class="example-box">
+                <p><strong>⚠️ US-013: Security Hardening</strong></p>
+                <p>• Requirements not fully defined<br>
+                • Need security team input</p>
+            </div>
+        </div>
+    </div>
+    
+    <div id="releaseModal" class="modal" onclick="closeModal('release', event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeModal('release')">&times;</button>
+            <h2>🚀 Release Planning</h2>
+            <p class="ceremony-meta">⏱️ Duration: 3 jam • 📅 Frequency: Quarterly • 👥 Participants: PO, SM, Tech Leads, Stakeholders</p>
+            
+            <h3>Release: QA Transformation v1.0</h3>
+            <p><strong>Target Date:</strong> 30 April 2027</p>
+            <p><strong>Sprints Included:</strong> Sprint 1-6</p>
+            
+            <h3>Release Goals</h3>
+            <ol>
+                <li>Reduce debugging time from 60% to &lt;20%</li>
+                <li>Achieve &gt;95% deployment success rate</li>
+                <li>Implement full DevSecOps pipeline</li>
+                <li>Train entire development team</li>
+                <li>Establish quality metrics dashboard</li>
+            </ol>
+            
+            <h3>Features by Sprint</h3>
+            
+            <div class="example-box">
+                <h4>Sprint 1 (Mei-Jun): Foundation</h4>
+                <ul>
+                    <li>CI/CD Infrastructure</li>
+                    <li>QA Tools Setup</li>
+                    <li>Initial Training</li>
+                </ul>
+            </div>
+            
+            <div class="example-box">
+                <h4>Sprint 2 (Jul-Ags): Shift-Left Implementation</h4>
+                <ul>
+                    <li>Automated Testing</li>
+                    <li>Code Quality Gates</li>
+                    <li>Review Workflows</li>
+                </ul>
+            </div>
+            
+            <div class="example-box">
+                <h4>Sprint 3 (Sep-Okt): Security Integration</h4>
+                <ul>
+                    <li>SAST/DAST Scanning</li>
+                    <li>Integration Tests</li>
+                    <li>Regression Framework</li>
+                </ul>
+            </div>
+            
+            <div class="example-box">
+                <h4>Sprint 4 (Nov-Des): Performance & Load</h4>
+                <ul>
+                    <li>Performance Testing</li>
+                    <li>Load Testing</li>
+                    <li>Advanced Training</li>
+                </ul>
+            </div>
+            
+            <div class="example-box">
+                <h4>Sprint 5 (Jan-Feb): Monitoring & Metrics</h4>
+                <ul>
+                    <li>Defect Dashboards</li>
+                    <li>DevSecOps Complete</li>
+                    <li>Process Refinement</li>
+                </ul>
+            </div>
+            
+            <div class="example-box">
+                <h4>Sprint 6 (Mar-Apr): Stabilization & Closure</h4>
+                <ul>
+                    <li>UAT & Validation</li>
+                    <li>Final Documentation</li>
+                    <li>Handover</li>
+                </ul>
+            </div>
+            
+            <h3>Release Risks</h3>
+            <ul>
+                <li>🔴 HIGH: Tool licensing delays</li>
+                <li>🔴 HIGH: Team capacity during training</li>
+                <li>🟡 MEDIUM: Integration complexity</li>
+                <li>🟡 MEDIUM: Stakeholder availability</li>
+                <li>🟢 LOW: Infrastructure readiness</li>
+            </ul>
+            
+            <h3>Release Readiness Checklist</h3>
+            <div class="action-item">
+                <div class="action-checkbox"></div>
+                <div>All 6 sprints completed</div>
+            </div>
+            <div class="action-item">
+                <div class="action-checkbox"></div>
+                <div>KPIs met (debugging &lt;20%, deployment &gt;95%)</div>
+            </div>
+            <div class="action-item">
+                <div class="action-checkbox"></div>
+                <div>Team training completed (150 hours)</div>
+            </div>
+            <div class="action-item">
+                <div class="action-checkbox"></div>
+                <div>Documentation finalized</div>
+            </div>
+            <div class="action-item">
+                <div class="action-checkbox"></div>
+                <div>UAT passed</div>
+            </div>
+            <div class="action-item">
+                <div class="action-checkbox"></div>
+                <div>Stakeholder sign-off</div>
+            </div>
+            <div class="action-item">
+                <div class="action-checkbox"></div>
+                <div>MOV measurement validated</div>
+            </div>
+            <div class="action-item">
+                <div class="action-checkbox"></div>
+                <div>Handover to operations complete</div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function showCeremony(type) {
+            const modal = document.getElementById(type + 'Modal');
+            if (modal) {
+                modal.style.display = 'block';
+                document.body.style.overflow = 'hidden';
+            }
+        }
+        
+        function closeModal(type, event) {
+            if (!event || event.target.id === type + 'Modal') {
+                const modal = document.getElementById(type + 'Modal');
+                if (modal) {
+                    modal.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                }
+            }
+        }
+        
+        // Close modal on ESC key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const modals = document.querySelectorAll('.modal');
+                modals.forEach(modal => {
+                    modal.style.display = 'none';
+                });
+                document.body.style.overflow = 'auto';
+            }
+        });
+    </script>
+</body>
+</html>
