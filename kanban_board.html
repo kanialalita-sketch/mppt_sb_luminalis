@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prodia QA & Testing - Agile Board</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .header {
+            background: white;
+            padding: 20px 30px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            color: #2c3e50;
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+        
+        .header p {
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+        
+        .sprint-selector {
+            background: white;
+            padding: 15px 30px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .sprint-tab {
+            padding: 10px 20px;
+            border-radius: 6px;
+            background: #ecf0f1;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        .sprint-tab:hover {
+            background: #d5dbdb;
+        }
+        
+        .sprint-tab.active {
+            background: #3498db;
+            color: white;
+        }
+        
+        .board {
+            display: flex;
+            gap: 20px;
+            overflow-x: auto;
+            padding-bottom: 20px;
+        }
+        
+        .column {
+            background: #ebecf0;
+            border-radius: 8px;
+            min-width: 300px;
+            max-width: 300px;
+            padding: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .column-header {
+            font-weight: 600;
+            font-size: 14px;
+            color: #172b4d;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .card-count {
+            background: #dfe1e6;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 12px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 10px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .card:hover {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            transform: translateY(-2px);
+        }
+        
+        .card-title {
+            font-size: 14px;
+            color: #172b4d;
+            margin-bottom: 8px;
+            font-weight: 500;
+            line-height: 1.4;
+        }
+        
+        .card-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 8px;
+        }
+        
+        .label {
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+        
+        .label-priority-high {
+            background: #eb5a46;
+            color: white;
+        }
+        
+        .label-priority-medium {
+            background: #f2d600;
+            color: #172b4d;
+        }
+        
+        .label-priority-low {
+            background: #61bd4f;
+            color: white;
+        }
+        
+        .label-category {
+            background: #0079bf;
+            color: white;
+        }
+        
+        .label-security {
+            background: #c377e0;
+            color: white;
+        }
+        
+        .label-automation {
+            background: #ff9f1a;
+            color: white;
+        }
+        
+        .assignee {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #dfe1e6;
+            text-align: center;
+            line-height: 24px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #42526e;
+            margin-right: 4px;
+        }
+        
+        .story-points {
+            background: #f4f5f7;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #5e6c84;
+        }
+        
+        .legend {
+            background: white;
+            padding: 20px 30px;
+            border-radius: 8px;
+            margin-top: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .legend h3 {
+            font-size: 16px;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+        
+        .legend-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🚀 Prodia QA & Testing Transformation</h1>
+        <p>Agile Project Board - Penguatan QA dan Testing Process</p>
+    </div>
+    
+    <div class="sprint-selector">
+        <div class="sprint-tab active" onclick="showSprint(1)">Sprint 1: Mei-Jun 2026</div>
+        <div class="sprint-tab" onclick="showSprint(2)">Sprint 2: Jul-Ags 2026</div>
+        <div class="sprint-tab" onclick="showSprint(3)">Sprint 3: Sep-Okt 2026</div>
+        <div class="sprint-tab" onclick="showSprint(4)">Sprint 4: Nov-Des 2026</div>
+        <div class="sprint-tab" onclick="showSprint(5)">Sprint 5: Jan-Feb 2027</div>
+        <div class="sprint-tab" onclick="showSprint(6)">Sprint 6: Mar-Apr 2027</div>
+    </div>
+    
+    <div id="sprint-1" class="board">
+        <div class="column">
+            <div class="column-header">
+                📋 Product Backlog
+                <span class="card-count">5</span>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">Setup Jenkins CI/CD Pipeline Infrastructure</div>
+                <div class="card-meta">
+                    <span class="label label-priority-high">High Priority</span>
+                    <span class="label label-automation">Automation</span>
+                    <span class="story-points">13 SP</span>
+                    <span class="assignee">DV</span>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">Configure GitLab CI/CD Integration</div>
+                <div class="card-meta">
+                    <span class="label label-priority-high">High Priority</span>
+                    <span class="label label-category">Infrastructure</span>
+                    <span class="story-points">8 SP</span>
+                    <span class="assignee">DO</span>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">Design Test Strategy & Framework</div>
+                <div class="card-meta">
+                    <span class="label label-priority-high">High Priority</span>
+                    <span class="label label-category">Planning</span>
+                    <span class="story-points">5 SP</span>
+                    <span class="assignee">QA</span>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">Onboarding QA Tools (SonarQube, JMeter)</div>
+                <div class="card-meta">
+                    <span class="label label-priority-medium">Medium Priority</span>
+                    <span class="label label-category">Tools</span>
+                    <span class="story-points">8 SP</span>
+                    <span class="assignee">QA</span>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">Training Batch 1: Shift-Left Testing Fundamentals</div>
+                <div class="card-meta">
+                    <span class="label label-priority-high">High Priority</span>
+                    <span class="label label-category">Training</span>
+                    <span class="story-points">5 SP</span>
+                    <span class="assignee">PM</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="column">
+            <div class="column-header">
+                🏃 In Progress
+                <span class="card-count">0</span>
+            </div>
+        </div>
+        
+        <div class="column">
+            <div class="column-header">
+                🔍 In Review
+                <span class="card-count">0</span>
+            </div>
+        </div>
+        
+        <div class="column">
+            <div class="column-header">
+                ✅ Done
+                <span class="card-count">0</span>
+            </div>
+        </div>
+    </div>
+    
+    <div id="sprint-2" class="board" style="display: none;">
+        <div class="column">
+            <div class="column-header">
+                📋 Product Backlog
+                <span class="card-count">6</span>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">Implement Shift-Left Testing for Module A</div>
+                <div class="card-meta">
+                    <span class="label label-priority-high">High Priority</span>
+                    <span class="label label-category">Development</span>
+                    <span class="story-points">13 SP</span>
+                    <span class="assignee">QA</span>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">Create Automated Unit Test Suite</div>
+                <div class="card-meta">
+                    <span class="label label-priority-high">High Priority</span>
+                    <span class="label label-automation">Automation</span>
+                    <span class="story-points">13 SP</span>
+                    <span class="assignee">DV</span>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">Integrate SonarQube with CI/CD Pipeline</div>
+                <div class="card-meta">
+                    <span class="label label-priority-high">High Priority</span>
+                    <span class="label label-category">Integration</span>
+                    <span class="story-points">8 SP</span>
+                    <span class="assignee">DO</span>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">Setup Code Review Workflow (Jira + Bitbucket)</div>
+                <div class="card-meta">
+                    <span class="label label-priority-medium">Medium Priority</span>
+                    <span class="label label-category">Process</span>
+                    <span class="story-points">5 SP</span>
+                    <span class="assignee">PM</span>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">Define Coding Standards & Guidelines</div>
+                <div class="card-meta">
+                    <span class="label label-priority-medium">Medium Priority</span>
+                    <span class="label label-category">Documentation</span>
+                    <span class="story-points">3 SP</span>
+                    <span class="assignee">DV</span>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">Create Test Case Documentation Template</div>
+                <div class="card-meta">
+                    <span class="label label-priority-low">Low Priority</span>
+                    <span class="label label-category">Documentation</span>
+                    <span class="story-points">2 SP</span>
+                    <span class="assignee">QA</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="column">
+            <div class="column-header">
+                🏃 In Progress
+                <span class="card-count">0</span>
+            </div>
+        </div>
+        
+        <div class="column">
+            <div class="column-header">
+                🔍 In Review
+                <span class="card-count">0</span>
+            </div>
+        </div>
+        
+        <div class="column">
+            <div class="column-header">
+                ✅ Done
+                <span class="card-count">0</span>
+            </div>
+        </div>
+    </div>
+    
+    <div id="sprint-3" class="board" style="display: none;">
+        <div class="column">
+            <div class="column-header">
+                📋 Product Backlog
+                <span class="card-count">5</span>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">Complete CI/CD Pipeline Full Implementation</div>
+                <div class="card-meta">
+                    <span class="label label-priority-high">High Priority</span>
+                    <span class="label label-automation">Automation</span>
+                    <span class="story-points">13 SP</span>
+                    <span class="assignee">DO</span>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">Build Integration Test Suite</div>
+                <div class="card-meta">
+                    <span class="label label-priority-high">High Priority</span>
+                    <span class="label label-automation">Automation</span>
+                    <span class="story-points">13 SP</span>
+                    <span class="assignee">QA</span>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">Integrate SAST Scanning Tools</div>
+                <div class="card-meta">
+                    <span class="label label-priority-high">High Priority</span>
+                    <span class="label label-security">Security</span>
+                    <span class="story-points">8 SP</span>
+                    <span class="assignee">SC</span>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">Integrate DAST Scanning Tools</div>
+                <div class="card-meta">
+                    <span class="label label-priority-high">High Priority</span>
+                    <span class="label label-security">Security</span>
+                    <span class="story-points">8 SP</span>
+                    <span class="assignee">SC</span>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">Develop Regression Testing Framework</div>
+                <div class="card-meta">
+                    <span class="label label-priority-high">High Priority</span>
+                    <span class="label label-automation">Automation</span>
+                    <span class="story-points">13 SP</span>
+                    <span class="assignee">QA</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="column">
+            <div class="column-header">
+                🏃 In Progress
+                <span class="card-count">0</span>
+            </div>
+        </div>
+        
+        <div class="column">
+            <div class="column-header">
+                🔍 In Review
+                <span class="card-count">0</span>
+            </div>
+        </div>
+        
+        <div class="column">
+            <div class="column-header">
+                ✅ Done
+                <span class="card-count">0</span>
+            </div>
+        </div>
+    </div>
+    
+    <div id="sprint-4" class="board" style="display: none;">
+        <div class="column">
+            <div class="column-header">
+                📋 Product Backlog
+                <span class="card-count">5</span>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">Setup Performance Testing Framework (JMeter)</div>
+                <div class="card-meta">
+                    <span class="label label-priority-high">High Priority</span>
+                    <span class="label label-automation">Automation</span>
+                    <span class="story-points">8 SP</span>
+                    <span class="assignee">QA</span>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">Setup Load Testing Framework (Gatling)</div>
+                <div class="card-meta">
+                    <span class="label label-priority-high">High Priority</span>
+                    <span class="label label-automation">Automation</span>
+                    <span class="story-points">8 SP</span>
+                    <span class="assignee">QA</span>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">Implement Security Hardening Measures</div>
+                <div class="card-meta">
+                    <span class="label label-priority-high">High Priority</span>
+                    <span class="label label-security">Security</span>
+                    <span class="story-points">13 SP</span>
+                    <span class="assignee">SC</span>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">Training Batch 2: DevSecOps & Automation</div>
+                <div class="card-meta">
+                    <span class="label label-priority-high">High Priority</span>
+                    <span class="label label-category">Training</span>
+                    <span class="story-points">5 SP</span>
+                    <span class="assignee">PM</span>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">Execute Performance Benchmark Tests</div>
+                <div class="card-meta">
+                    <span class="label label-priority-medium">Medium Priority</span>
+                    <span class="label label-category">Testing</span>
+                    <span class="story-points">5 SP</span>
+                    <span class="assignee">QA</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="column">
+            <div class="column-header">
+                🏃 In Progress
+                <span class="card-count">0</span>
+            </div>
+        </div>
+        
+        <div class="column">
+            <div class="column-header">
+                🔍 In Review
+                <span class="card-count">0</span>
+            </div>
+        </div>
+        
+        <div class="column">
+            <div class="column-header">
+                ✅ Done
+                <span class="card-count">0</span>
+            </div>
+        </div>
+    </div>
+    
+    <div id="sprint-5" class="board" style="display: none;">
+        <div class="column">
+            <div class="column-header">
+                📋 Product Backlog
+                <span class="card-count">5</span>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">Build Monitoring Dashboard for Defect Metrics</div>
+                <div class="card-meta">
+                    <span class="label label-priority-high">High Priority</span>
+                    <span class="label label-category">Monitoring</span>
+                    <span class="story-points">8 SP</span>
+                    <span class="assignee">DO</span>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">Establish Defect Metric Baseline</div>
+                <div class="card-meta">
+                    <span class="label label-priority-high">High Priority</span>
+                    <span class="label label-category">Metrics</span>
+                    <span class="story-points">5 SP</span>
+                    <span class="assignee">PM</span>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">Complete DevSecOps Full Pipeline Integration</div>
+                <div class="card-meta">
+                    <span class="label label-priority-high">High Priority</span>
+                    <span class="label label-security">Security</span>
+                    <span class="story-points">13 SP</span>
+                    <span class="assignee">DO</span>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">Conduct Sprint Retrospective & Lessons Learned</div>
+                <div class="card-meta">
+                    <span class="label label-priority-medium">Medium Priority</span>
+                    <span class="label label-category">Process</span>
+                    <span class="story-points">3 SP</span>
+                    <span class="assignee">PM</span>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">Process Improvement Recommendations</div>
+                <div class="card-meta">
+                    <span class="label label-priority-medium">Medium Priority</span>
+                    <span class="label label-category">Documentation</span>
+                    <span class="story-points">3 SP</span>
+                    <span class="assignee">PM</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="column">
+            <div class="column-header">
+                🏃 In Progress
+                <span class="card-count">0</span>
+            </div>
+        </div>
+        
+        <div class="column">
+            <div class="column-header">
+                🔍 In Review
+                <span class="card-count">0</span>
+            </div>
+        </div>
+        
+        <div class="column">
+            <div class="column-header">
+                ✅ Done
+                <span class="card-count">0</span>
+            </div>
+        </div>
+    </div>
+    
+    <div id="sprint-6" class="board" style="display: none;">
+        <div class="column">
+            <div class="column-header">
+                📋 Product Backlog
+                <span class="card-count">5</span>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">System Stabilization & Bug Fixing</div>
+                <div class="card-meta">
+                    <span class="label label-priority-high">High Priority</span>
+                    <span class="label label-category">Development</span>
+                    <span class="story-points">8 SP</span>
+                    <span class="assignee">DV</span>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">Conduct User Acceptance Testing (UAT)</div>
+                <div class="card-meta">
+                    <span class="label label-priority-high">High Priority</span>
+                    <span class="label label-category">Testing</span>
+                    <span class="story-points">8 SP</span>
+                    <span class="assignee">QA</span>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">Complete Final Documentation</div>
+                <div class="card-meta">
+                    <span class="label label-priority-high">High Priority</span>
+                    <span class="label label-category">Documentation</span>
+                    <span class="story-points">5 SP</span>
+                    <span class="assignee">PM</span>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">MOV Measurement & KPI Validation</div>
+                <div class="card-meta">
+                    <span class="label label-priority-high">High Priority</span>
+                    <span class="label label-category">Metrics</span>
+                    <span class="story-points">5 SP</span>
+                    <span class="assignee">PM</span>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">Project Closure Report & Handover</div>
+                <div class="card-meta">
+                    <span class="label label-priority-high">High Priority</span>
+                    <span class="label label-category">Documentation</span>
+                    <span class="story-points">3 SP</span>
+                    <span class="assignee">PM</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="column">
+            <div class="column-header">
+                🏃 In Progress
+                <span class="card-count">0</span>
+            </div>
+        </div>
+        
+        <div class="column">
+            <div class="column-header">
+                🔍 In Review
+                <span class="card-count">0</span>
+            </div>
+        </div>
+        
+        <div class="column">
+            <div class="column-header">
+                ✅ Done
+                <span class="card-count">0</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="legend">
+        <h3>Legend</h3>
+        <div class="legend-items">
+            <div class="legend-item">
+                <span class="assignee">PM</span>
+                <span>Project Manager</span>
+            </div>
+            <div class="legend-item">
+                <span class="assignee">DV</span>
+                <span>Developer</span>
+            </div>
+            <div class="legend-item">
+                <span class="assignee">QA</span>
+                <span>QA Engineer</span>
+            </div>
+            <div class="legend-item">
+                <span class="assignee">DO</span>
+                <span>DevOps</span>
+            </div>
+            <div class="legend-item">
+                <span class="assignee">SC</span>
+                <span>Security Team</span>
+            </div>
+            <div class="legend-item">
+                <span class="story-points">SP</span>
+                <span>Story Points</span>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function showSprint(sprintNumber) {
+            // Hide all sprints
+            for (let i = 1; i <= 6; i++) {
+                document.getElementById('sprint-' + i).style.display = 'none';
+            }
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.sprint-tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected sprint
+            document.getElementById('sprint-' + sprintNumber).style.display = 'flex';
+            
+            // Add active class to selected tab
+            tabs[sprintNumber - 1].classList.add('active');
+        }
+    </script>
+</body>
+</html>
