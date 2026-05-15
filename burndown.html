@@ -3,9 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sprint Planning & Burndown Chart</title>
+    <title>Sprint Burndown Charts - Prodia QA Transformation</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
+        /* Navigation */
+        nav {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+        
+        .logo-icon {
+            font-size: 24px;
+        }
+        
+        .logo-text h1 {
+            font-size: 18px;
+            color: #2c3e50;
+            margin: 0;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 25px;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .nav-links a {
+            color: #2c3e50;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            transition: color 0.3s;
+            padding: 8px 12px;
+            border-radius: 4px;
+        }
+        
+        .nav-links a:hover {
+            color: #3498db;
+            background: #f8f9fa;
+        }
+        
+        .nav-links a.active {
+            color: #3498db;
+            background: #e3f2fd;
+        }
+        
         * {
             margin: 0;
             padding: 0;
@@ -187,6 +252,24 @@
     </style>
 </head>
 <body>
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <div class="logo-icon">🚀</div>
+                <div class="logo-text">
+                    <h1>Prodia QA Transformation</h1>
+                </div>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="burndown.html" class="active">Burndown Charts</a></li>
+                <li><a href="kanban.html">Kanban Board</a></li>
+                <li><a href="backlog.html">Product Backlog</a></li>
+                <li><a href="meetings.html">Meeting Notes</a></li>
+            </ul>
+        </div>
+    </nav>
+    
     <div class="container">
         <div class="header">
             <h1>📊 Sprint Planning & Burndown Charts</h1>
