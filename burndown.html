@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sprint Planning & Burndown Chart</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .card h2 {
+            color: #2c3e50;
+            font-size: 18px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #ecf0f1;
+        }
+        
+        .sprint-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .sprint-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            background: #ecf0f1;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .sprint-btn:hover {
+            background: #d5dbdb;
+        }
+        
+        .sprint-btn.active {
+            background: #3498db;
+            color: white;
+        }
+        
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .metric-box {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .metric-label {
+            font-size: 12px;
+            color: #7f8c8d;
+            margin-bottom: 5px;
+        }
+        
+        .metric-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 300px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th {
+            background: #f8f9fa;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 13px;
+            color: #2c3e50;
+            border-bottom: 2px solid #ecf0f1;
+        }
+        
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #ecf0f1;
+            font-size: 13px;
+        }
+        
+        .priority-high {
+            background: #eb5a46;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+        
+        .priority-medium {
+            background: #f2d600;
+            color: #172b4d;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+        
+        .priority-low {
+            background: #61bd4f;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+        
+        .full-width {
+            grid-column: 1 / -1;
+        }
+        
+        .status-todo {
+            color: #95a5a6;
+        }
+        
+        .status-progress {
+            color: #3498db;
+        }
+        
+        .status-done {
+            color: #27ae60;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 Sprint Planning & Burndown Charts</h1>
+            <p class="subtitle">Prodia QA & Testing Transformation - Agile Metrics Dashboard</p>
+        </div>
+        
+        <div class="sprint-selector">
+            <button class="sprint-btn active" onclick="showSprint(1)">Sprint 1</button>
+            <button class="sprint-btn" onclick="showSprint(2)">Sprint 2</button>
+            <button class="sprint-btn" onclick="showSprint(3)">Sprint 3</button>
+            <button class="sprint-btn" onclick="showSprint(4)">Sprint 4</button>
+            <button class="sprint-btn" onclick="showSprint(5)">Sprint 5</button>
+            <button class="sprint-btn" onclick="showSprint(6)">Sprint 6</button>
+        </div>
+        
+        <div id="sprint-1-content">
+            <div class="metrics">
+                <div class="metric-box">
+                    <div class="metric-label">Total Story Points</div>
+                    <div class="metric-value">39</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-label">Sprint Duration</div>
+                    <div class="metric-value">2 Bulan</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-label">Team Velocity</div>
+                    <div class="metric-value">TBD</div>
+                </div>
+            </div>
+            
+            <div class="grid">
+                <div class="card">
+                    <h2>Sprint 1 Burndown Chart</h2>
+                    <div class="chart-container">
+                        <canvas id="burndown1"></canvas>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h2>Sprint Goal</h2>
+                    <p style="margin-bottom: 15px; color: #34495e; line-height: 1.6;">
+                        Membangun fondasi infrastruktur CI/CD dan melakukan onboarding tools utama untuk mendukung automated testing dan quality assurance.
+                    </p>
+                    <h3 style="font-size: 14px; margin-top: 20px; margin-bottom: 10px; color: #2c3e50;">Key Deliverables:</h3>
+                    <ul style="margin-left: 20px; color: #34495e; line-height: 1.8;">
+                        <li>Jenkins & GitLab CI/CD pipeline</li>
+                        <li>Test strategy framework</li>
+                        <li>QA tools onboarding</li>
+                        <li>Training batch 1 completed</li>
+                    </ul>
+                </div>
+                
+                <div class="card full-width">
+                    <h2>Sprint 1 Backlog</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Task</th>
+                                <th>Assignee</th>
+                                <th>Priority</th>
+                                <th>Story Points</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>PB-001</td>
+                                <td>Setup Jenkins CI/CD Pipeline Infrastructure</td>
+                                <td>DevOps</td>
+                                <td><span class="priority-high">High</span></td>
+                                <td>13</td>
+                                <td class="status-todo">To Do</td>
+                            </tr>
+                            <tr>
+                                <td>PB-002</td>
+                                <td>Configure GitLab CI/CD Integration</td>
+                                <td>DevOps</td>
+                                <td><span class="priority-high">High</span></td>
+                                <td>8</td>
+                                <td class="status-todo">To Do</td>
+                            </tr>
+                            <tr>
+                                <td>PB-003</td>
+                                <td>Design Test Strategy & Framework</td>
+                                <td>QA Lead</td>
+                                <td><span class="priority-high">High</span></td>
+                                <td>5</td>
+                                <td class="status-todo">To Do</td>
+                            </tr>
+                            <tr>
+                                <td>PB-004</td>
+                                <td>Onboarding QA Tools (SonarQube, JMeter)</td>
+                                <td>QA Engineer</td>
+                                <td><span class="priority-medium">Medium</span></td>
+                                <td>8</td>
+                                <td class="status-todo">To Do</td>
+                            </tr>
+                            <tr>
+                                <td>PB-005</td>
+                                <td>Training Batch 1: Shift-Left Testing Fundamentals</td>
+                                <td>PM</td>
+                                <td><span class="priority-high">High</span></td>
+                                <td>5</td>
+                                <td class="status-todo">To Do</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <div id="sprint-2-content" style="display: none;">
+            <div class="metrics">
+                <div class="metric-box">
+                    <div class="metric-label">Total Story Points</div>
+                    <div class="metric-value">44</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-label">Sprint Duration</div>
+                    <div class="metric-value">2 Bulan</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-label">Team Velocity</div>
+                    <div class="metric-value">TBD</div>
+                </div>
+            </div>
+            
+            <div class="grid">
+                <div class="card">
+                    <h2>Sprint 2 Burndown Chart</h2>
+                    <div class="chart-container">
+                        <canvas id="burndown2"></canvas>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h2>Sprint Goal</h2>
+                    <p style="margin-bottom: 15px; color: #34495e; line-height: 1.6;">
+                        Implementasi shift-left testing pada module pertama dan membangun automated unit test suite yang terintegrasi dengan code review workflow.
+                    </p>
+                    <h3 style="font-size: 14px; margin-top: 20px; margin-bottom: 10px; color: #2c3e50;">Key Deliverables:</h3>
+                    <ul style="margin-left: 20px; color: #34495e; line-height: 1.8;">
+                        <li>Shift-left testing Module A</li>
+                        <li>Automated unit tests</li>
+                        <li>SonarQube integration</li>
+                        <li>Code review workflow</li>
+                    </ul>
+                </div>
+                
+                <div class="card full-width">
+                    <h2>Sprint 2 Backlog</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Task</th>
+                                <th>Assignee</th>
+                                <th>Priority</th>
+                                <th>Story Points</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>PB-006</td>
+                                <td>Implement Shift-Left Testing for Module A</td>
+                                <td>QA Engineer</td>
+                                <td><span class="priority-high">High</span></td>
+                                <td>13</td>
+                                <td class="status-todo">To Do</td>
+                            </tr>
+                            <tr>
+                                <td>PB-007</td>
+                                <td>Create Automated Unit Test Suite</td>
+                                <td>Developer</td>
+                                <td><span class="priority-high">High</span></td>
+                                <td>13</td>
+                                <td class="status-todo">To Do</td>
+                            </tr>
+                            <tr>
+                                <td>PB-008</td>
+                                <td>Integrate SonarQube with CI/CD Pipeline</td>
+                                <td>DevOps</td>
+                                <td><span class="priority-high">High</span></td>
+                                <td>8</td>
+                                <td class="status-todo">To Do</td>
+                            </tr>
+                            <tr>
+                                <td>PB-009</td>
+                                <td>Setup Code Review Workflow (Jira + Bitbucket)</td>
+                                <td>PM</td>
+                                <td><span class="priority-medium">Medium</span></td>
+                                <td>5</td>
+                                <td class="status-todo">To Do</td>
+                            </tr>
+                            <tr>
+                                <td>PB-010</td>
+                                <td>Define Coding Standards & Guidelines</td>
+                                <td>Developer</td>
+                                <td><span class="priority-medium">Medium</span></td>
+                                <td>3</td>
+                                <td class="status-todo">To Do</td>
+                            </tr>
+                            <tr>
+                                <td>PB-011</td>
+                                <td>Create Test Case Documentation Template</td>
+                                <td>QA Engineer</td>
+                                <td><span class="priority-low">Low</span></td>
+                                <td>2</td>
+                                <td class="status-todo">To Do</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <div id="sprint-3-content" style="display: none;">
+            <div class="metrics">
+                <div class="metric-box">
+                    <div class="metric-label">Total Story Points</div>
+                    <div class="metric-value">55</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-label">Sprint Duration</div>
+                    <div class="metric-value">2 Bulan</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-label">Team Velocity</div>
+                    <div class="metric-value">TBD</div>
+                </div>
+            </div>
+            
+            <div class="grid">
+                <div class="card">
+                    <h2>Sprint 3 Burndown Chart</h2>
+                    <div class="chart-container">
+                        <canvas id="burndown3"></canvas>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h2>Sprint Goal</h2>
+                    <p style="margin-bottom: 15px; color: #34495e; line-height: 1.6;">
+                        Melengkapi CI/CD pipeline secara penuh dengan integration test suite dan security scanning (SAST/DAST) untuk DevSecOps implementation.
+                    </p>
+                    <h3 style="font-size: 14px; margin-top: 20px; margin-bottom: 10px; color: #2c3e50;">Key Deliverables:</h3>
+                    <ul style="margin-left: 20px; color: #34495e; line-height: 1.8;">
+                        <li>Full CI/CD pipeline</li>
+                        <li>Integration test suite</li>
+                        <li>SAST/DAST scanning</li>
+                        <li>Regression framework</li>
+                    </ul>
+                </div>
+                
+                <div class="card full-width">
+                    <h2>Sprint 3 Backlog</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Task</th>
+                                <th>Assignee</th>
+                                <th>Priority</th>
+                                <th>Story Points</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>PB-012</td>
+                                <td>Complete CI/CD Pipeline Full Implementation</td>
+                                <td>DevOps</td>
+                                <td><span class="priority-high">High</span></td>
+                                <td>13</td>
+                                <td class="status-todo">To Do</td>
+                            </tr>
+                            <tr>
+                                <td>PB-013</td>
+                                <td>Build Integration Test Suite</td>
+                                <td>QA Engineer</td>
+                                <td><span class="priority-high">High</span></td>
+                                <td>13</td>
+                                <td class="status-todo">To Do</td>
+                            </tr>
+                            <tr>
+                                <td>PB-014</td>
+                                <td>Integrate SAST Scanning Tools</td>
+                                <td>Security</td>
+                                <td><span class="priority-high">High</span></td>
+                                <td>8</td>
+                                <td class="status-todo">To Do</td>
+                            </tr>
+                            <tr>
+                                <td>PB-015</td>
+                                <td>Integrate DAST Scanning Tools</td>
+                                <td>Security</td>
+                                <td><span class="priority-high">High</span></td>
+                                <td>8</td>
+                                <td class="status-todo">To Do</td>
+                            </tr>
+                            <tr>
+                                <td>PB-016</td>
+                                <td>Develop Regression Testing Framework</td>
+                                <td>QA Engineer</td>
+                                <td><span class="priority-high">High</span></td>
+                                <td>13</td>
+                                <td class="status-todo">To Do</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const sprintData = {
+            1: {
+                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6', 'Week 7', 'Week 8'],
+                ideal: [39, 34, 29, 24, 19, 14, 9, 0],
+                actual: [39, 35, 30, 22, 18, 12, 6, 0]
+            },
+            2: {
+                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6', 'Week 7', 'Week 8'],
+                ideal: [44, 38.5, 33, 27.5, 22, 16.5, 11, 0],
+                actual: [44, 40, 35, 28, 22, 16, 10, 0]
+            },
+            3: {
+                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6', 'Week 7', 'Week 8'],
+                ideal: [55, 48, 41, 34, 27, 20, 13, 0],
+                actual: [55, 50, 43, 35, 28, 20, 12, 0]
+            }
+        };
+        
+        let charts = {};
+        
+        function createBurndownChart(canvasId, sprintNum) {
+            const ctx = document.getElementById(canvasId);
+            if (!ctx) return;
+            
+            const data = sprintData[sprintNum];
+            
+            charts[canvasId] = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: data.labels,
+                    datasets: [{
+                        label: 'Ideal Burndown',
+                        data: data.ideal,
+                        borderColor: '#95a5a6',
+                        borderDash: [5, 5],
+                        tension: 0.1,
+                        fill: false
+                    }, {
+                        label: 'Actual Burndown',
+                        data: data.actual,
+                        borderColor: '#3498db',
+                        backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Story Points Remaining'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Sprint Timeline'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        function showSprint(sprintNum) {
+            // Hide all sprint contents
+            for (let i = 1; i <= 6; i++) {
+                const content = document.getElementById(`sprint-${i}-content`);
+                if (content) content.style.display = 'none';
+            }
+            
+            // Remove active class from all buttons
+            const buttons = document.querySelectorAll('.sprint-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            // Show selected sprint
+            const selectedContent = document.getElementById(`sprint-${sprintNum}-content`);
+            if (selectedContent) selectedContent.style.display = 'block';
+            
+            // Add active class to selected button
+            buttons[sprintNum - 1].classList.add('active');
+            
+            // Create chart if it doesn't exist and we have data
+            const canvasId = `burndown${sprintNum}`;
+            if (sprintData[sprintNum] && !charts[canvasId]) {
+                setTimeout(() => createBurndownChart(canvasId, sprintNum), 100);
+            }
+        }
+        
+        // Initialize first sprint chart
+        window.addEventListener('load', () => {
+            createBurndownChart('burndown1', 1);
+        });
+    </script>
+</body>
+</html>
