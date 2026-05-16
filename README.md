@@ -1,6 +1,6 @@
-# Prodia QA Transformation - Agile Project Management Website
+# PT P QA Transformation - Agile Project Management Website
 
-Website lengkap untuk proyek "Penguatan QA dan Testing Process" PT Prodia Widyahusada Tbk dengan pendekatan Agile Project Management.
+Website lengkap untuk proyek "Penguatan QA dan Testing Process" PT P dengan pendekatan Agile Project Management.
 
 ## 📁 Struktur Website
 
@@ -153,7 +153,7 @@ Template mudah diperluas dengan content baru.
 
 ## 📝 Project Context
 
-**Client:** PT Prodia Widyahusada Tbk
+**Client:** PT P
 **Project:** Penguatan QA dan Testing Process
 **Duration:** 12 bulan (Mei 2026 - Apr 2027)
 **Approach:** Agile Scrum
@@ -226,4 +226,4 @@ Untuk pertanyaan atau feedback mengenai website ini, hubungi team Kelompok 5.
 **Version:** 1.0
 **Last Updated:** 2026
 
-© 2026 Prodia QA Transformation Project - Kelompok 5 MPPTI
+© 2026 PT P QA Transformation Project - Kelompok 5 MPPTI
