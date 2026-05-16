@@ -365,6 +365,119 @@
                 display: none;
             }
         }
+        
+        /* MOBILE RESPONSIVE */
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-wrap: wrap;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .nav-links.mobile-open {
+                display: flex !important;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: white;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+                padding: 20px;
+                gap: 10px;
+                z-index: 1000;
+            }
+            
+            .container, .hero, .cards-section, .project-info {
+                padding-left: 15px;
+                padding-right: 15px;
+            }
+            
+            .header, .hero-content, .info-card, .feature-card {
+                padding: 25px 20px;
+            }
+            
+            .hero h1 {
+                font-size: 32px;
+            }
+            
+            .hero p {
+                font-size: 16px;
+            }
+            
+            .section-title {
+                font-size: 24px;
+            }
+            
+            .cards-grid {
+                grid-template-columns: 1fr !important;
+            }
+            
+            .stats {
+                grid-template-columns: repeat(2, 1fr) !important;
+            }
+            
+            .info-grid {
+                grid-template-columns: 1fr !important;
+            }
+            
+            .timeline li {
+                font-size: 13px;
+            }
+            
+            div[style*="grid-template-columns: repeat(4, 1fr)"] {
+                display: grid !important;
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 20px !important;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .stats {
+                grid-template-columns: 1fr !important;
+            }
+            
+            .stat-number {
+                font-size: 32px;
+            }
+            
+            .logo-text h1 {
+                font-size: 16px;
+            }
+            
+            .hero h1 {
+                font-size: 28px;
+            }
+            
+            div[style*="grid-template-columns: repeat(4, 1fr)"],
+            div[style*="grid-template-columns: repeat(2, 1fr)"] {
+                grid-template-columns: 1fr !important;
+            }
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: #2c3e50;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+        
+        .mobile-menu-btn:hover {
+            background: #f8f9fa;
+        }
+        
+        @media (max-width: 768px) {
+            .mobile-menu-btn {
+                display: block !important;
+            }
+        }
     </style>
 </head>
 <body>
@@ -385,6 +498,7 @@
                 <li><a href="backlog.html">Product Backlog</a></li>
                 <li><a href="meetings.html">Meeting Notes</a></li>
             </ul>
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
         </div>
     </nav>
     
@@ -578,7 +692,7 @@
     <div class="project-info">
         <div style="background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); text-align: center;">
             <h2 style="color: #2c3e50; margin-bottom: 30px; font-size: 32px;">👥 2025SB - Kelompok 5 - The Luminalis</h2>
-            <h3 style="color: #7f8c8d; margin-bottom: 40px; font-size: 16px;">Fakultas Ilmu Komputer - Universitas Indonesia</h3>
+            <p style="color: #7f8c8d; margin-bottom: 40px; font-size: 16px;">Fakultas Ilmu Komputer - Universitas Indonesia</p>
             
             <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; max-width: 1200px; margin: 0 auto;">
                 <div style="text-align: center;">
@@ -586,7 +700,7 @@
                         <img src="https://i.imgur.com/BpZZDdV.png" alt="Rifka Uli Siregar" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22120%22 height=%22120%22%3E%3Crect fill=%22%23667eea%22 width=%22120%22 height=%22120%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-size=%2248%22 fill=%22white%22 font-family=%22Arial%22%3ERU%3C/text%3E%3C/svg%3E';">
                     </div>
                     <h4 style="color: #2c3e50; margin-bottom: 5px; font-size: 16px;">Rifka Uli Siregar</h4>
-                    <p style="color: #7f8c8d; font-size: 13px;">Product Owner</p>
+                    <p style="color: #7f8c8d; font-size: 13px;">Project Manager</p>
                 </div>
                 
                 <div style="text-align: center;">
@@ -626,5 +740,27 @@
             </p>
         </div>
     </footer>
+    
+    <script>
+        function toggleMobileMenu() {
+            const navLinks = document.querySelector(".nav-links");
+            navLinks.classList.toggle("mobile-open");
+        }
+        
+        document.addEventListener("click", function(event) {
+            const nav = document.querySelector("nav");
+            const navLinks = document.querySelector(".nav-links");
+            
+            if (!nav.contains(event.target) && navLinks.classList.contains("mobile-open")) {
+                navLinks.classList.remove("mobile-open");
+            }
+        });
+        
+        document.querySelectorAll(".nav-links a").forEach(link => {
+            link.addEventListener("click", function() {
+                document.querySelector(".nav-links").classList.remove("mobile-open");
+            });
+        });
+    </script>
 </body>
 </html>

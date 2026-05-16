@@ -305,6 +305,98 @@
             border: 2px solid #3498db;
             border-radius: 4px;
         }
+    
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-wrap: wrap;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .nav-links.mobile-open {
+                display: flex !important;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: white;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+                padding: 20px;
+                gap: 10px;
+                z-index: 1000;
+            }
+            
+            .container {
+                padding: 0 15px;
+            }
+            
+            .header {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 24px;
+            }
+            
+            .header p {
+                font-size: 13px;
+            }
+            
+            .cards-grid, .ceremony-grid {
+                grid-template-columns: 1fr !important;
+            }
+            
+            .stats, .team-stats, .summary-cards, .metrics-grid, .timeline-info {
+                grid-template-columns: repeat(2, 1fr) !important;
+            }
+            
+            .info-grid, .charts-grid {
+                grid-template-columns: 1fr !important;
+            }
+            
+            table {
+                font-size: 12px;
+            }
+            
+            th, td {
+                padding: 8px 6px;
+            }
+            
+            .gantt-container, .chart-container {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            .filters, .timeline-controls {
+                flex-direction: column;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .stats, .team-stats, .summary-cards, .metrics-grid, .timeline-info {
+                grid-template-columns: 1fr !important;
+            }
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #2c3e50;
+            padding: 8px;
+        }
+        
+        @media (max-width: 768px) {
+            .mobile-menu-btn {
+                display: block !important;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -325,6 +417,7 @@
                 <li><a href="meetings.html" class="active">Meeting Notes</a></li>
                 
             </ul>
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
         </div>
     </nav>
     
@@ -887,6 +980,24 @@
                     modal.style.display = 'none';
                 });
                 document.body.style.overflow = 'auto';
+            }
+        });
+    </script>
+
+    <script>
+        function toggleMobileMenu() {
+            const navLinks = document.querySelector('.nav-links');
+            navLinks.classList.toggle('mobile-open');
+        }
+        
+        // Close menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const nav = document.querySelector('nav');
+            const menuBtn = document.querySelector('.mobile-menu-btn');
+            const navLinks = document.querySelector('.nav-links');
+            
+            if (!nav.contains(event.target) && navLinks.classList.contains('mobile-open')) {
+                navLinks.classList.remove('mobile-open');
             }
         });
     </script>
