@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PT P QA Transformation - Project Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        /* Navigation */
+        nav {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo-icon {
+            font-size: 32px;
+        }
+        
+        .logo-text h1 {
+            font-size: 22px;
+            color: #2c3e50;
+            margin-bottom: 2px;
+        }
+        
+        .logo-text p {
+            font-size: 12px;
+            color: #7f8c8d;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            color: #2c3e50;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            transition: color 0.3s;
+            padding: 8px 0;
+            border-bottom: 2px solid transparent;
+        }
+        
+        .nav-links a:hover {
+            color: #3498db;
+            border-bottom-color: #3498db;
+        }
+        
+        /* Hero Section */
+        .hero {
+            max-width: 1400px;
+            margin: 60px auto;
+            padding: 0 40px;
+            text-align: center;
+        }
+        
+        .hero-content {
+            background: white;
+            padding: 60px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+        }
+        
+        .hero h1 {
+            font-size: 48px;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+        
+        .hero p {
+            font-size: 18px;
+            color: #7f8c8d;
+            margin-bottom: 40px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+            margin-top: 50px;
+        }
+        
+        .stat-card {
+            text-align: center;
+            padding: 30px 20px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 12px;
+            transition: transform 0.3s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-number {
+            font-size: 42px;
+            font-weight: 700;
+            color: #3498db;
+            margin-bottom: 10px;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: #7f8c8d;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        /* Cards Section */
+        .cards-section {
+            max-width: 1400px;
+            margin: 60px auto;
+            padding: 0 40px;
+        }
+        
+        .section-title {
+            text-align: center;
+            color: white;
+            font-size: 32px;
+            margin-bottom: 40px;
+        }
+        
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+        }
+        
+        .feature-card {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.2);
+        }
+        
+        .card-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        
+        .card-title {
+            font-size: 24px;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .card-description {
+            font-size: 15px;
+            color: #7f8c8d;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .card-features {
+            list-style: none;
+            margin-top: 20px;
+        }
+        
+        .card-features li {
+            padding: 8px 0;
+            color: #34495e;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .card-features li::before {
+            content: "✓";
+            color: #27ae60;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin-top: 15px;
+        }
+        
+        .btn:hover {
+            background: linear-gradient(135deg, #2980b9 0%, #3498db 100%);
+            transform: translateX(5px);
+        }
+        
+        /* Project Info Section */
+        .project-info {
+            max-width: 1400px;
+            margin: 60px auto;
+            padding: 0 40px;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+        }
+        
+        .info-card {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .info-card h2 {
+            font-size: 28px;
+            color: #2c3e50;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #3498db;
+        }
+        
+        .info-card h3 {
+            font-size: 18px;
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+        
+        .info-card p {
+            color: #7f8c8d;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+        
+        .info-card ul {
+            margin-left: 20px;
+            color: #34495e;
+        }
+        
+        .info-card li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        
+        .timeline {
+            list-style: none;
+            margin-left: 0;
+        }
+        
+        .timeline li {
+            padding: 15px 0;
+            border-left: 3px solid #3498db;
+            padding-left: 20px;
+            margin-left: 10px;
+            position: relative;
+        }
+        
+        .timeline li::before {
+            content: "";
+            width: 12px;
+            height: 12px;
+            background: #3498db;
+            border-radius: 50%;
+            position: absolute;
+            left: -7.5px;
+            top: 20px;
+        }
+        
+        .timeline-title {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        
+        .timeline-period {
+            font-size: 13px;
+            color: #7f8c8d;
+        }
+        
+        /* Footer */
+        footer {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px 0;
+            margin-top: 80px;
+        }
+        
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 40px;
+            text-align: center;
+        }
+        
+        footer p {
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+        
+        footer strong {
+            color: #2c3e50;
+        }
+        
+        @media (max-width: 768px) {
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+        }
+        
+        /* MOBILE RESPONSIVE */
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-wrap: wrap;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .nav-links.mobile-open {
+                display: flex !important;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: white;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+                padding: 20px;
+                gap: 10px;
+                z-index: 1000;
+            }
+            
+            .container, .hero, .cards-section, .project-info {
+                padding-left: 15px;
+                padding-right: 15px;
+            }
+            
+            .header, .hero-content, .info-card, .feature-card {
+                padding: 25px 20px;
+            }
+            
+            .hero h1 {
+                font-size: 32px;
+            }
+            
+            .hero p {
+                font-size: 16px;
+            }
+            
+            .section-title {
+                font-size: 24px;
+            }
+            
+            .cards-grid {
+                grid-template-columns: 1fr !important;
+            }
+            
+            .stats {
+                grid-template-columns: repeat(2, 1fr) !important;
+            }
+            
+            .info-grid {
+                grid-template-columns: 1fr !important;
+            }
+            
+            .timeline li {
+                font-size: 13px;
+            }
+            
+            div[style*="grid-template-columns: repeat(4, 1fr)"] {
+                display: grid !important;
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 20px !important;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .stats {
+                grid-template-columns: 1fr !important;
+            }
+            
+            .stat-number {
+                font-size: 32px;
+            }
+            
+            .logo-text h1 {
+                font-size: 16px;
+            }
+            
+            .hero h1 {
+                font-size: 28px;
+            }
+            
+            div[style*="grid-template-columns: repeat(4, 1fr)"],
+            div[style*="grid-template-columns: repeat(2, 1fr)"] {
+                grid-template-columns: 1fr !important;
+            }
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: #2c3e50;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+        
+        .mobile-menu-btn:hover {
+            background: #f8f9fa;
+        }
+        
+        @media (max-width: 768px) {
+            .mobile-menu-btn {
+                display: block !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <div class="logo">
+                <div class="logo-icon">🚀</div>
+                <div class="logo-text">
+                    <h1>PT P QA Transformation</h1>
+                    <p>Agile Project Management Dashboard</p>
+                </div>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="timeline.html">Timeline</a></li>
+                <li><a href="burndown.html">Burndown Charts</a></li>
+                <li><a href="kanban.html">Kanban Board</a></li>
+                <li><a href="backlog.html">Product Backlog</a></li>
+                <li><a href="meetings.html">Meeting Notes</a></li>
+            </ul>
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
+        </div>
+    </nav>
+    
+    <div class="hero">
+        <div class="hero-content">
+            <h1>Penguatan QA dan Testing Process</h1>
+            <p>
+                Proyek transformasi digital PT P untuk mengurangi technical debt 
+                dan meningkatkan kualitas proses pengembangan melalui implementasi shift-left testing, 
+                automated testing, CI/CD pipeline, dan pendekatan DevSecOps.
+            </p>
+            
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-number">6</div>
+                    <div class="stat-label">Sprints</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">12</div>
+                    <div class="stat-label">Bulan</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">238</div>
+                    <div class="stat-label">Story Points</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">31</div>
+                    <div class="stat-label">User Stories</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="cards-section">
+        <h2 class="section-title">Project Artifacts & Documentation</h2>
+        <div class="cards-grid">
+            <a href="burndown.html" class="feature-card">
+                <div class="card-icon">📊</div>
+                <h3 class="card-title">Sprint Burndown Charts</h3>
+                <p class="card-description">
+                    Visualisasi progress setiap sprint dengan burndown charts, sprint goals, 
+                    dan sprint backlog detail untuk 6 sprints.
+                </p>
+                <ul class="card-features">
+                    <li>Ideal vs Actual Velocity</li>
+                    <li>Sprint Metrics Dashboard</li>
+                    <li>Sprint Goals & Deliverables</li>
+                    <li>Backlog Breakdown per Sprint</li>
+                </ul>
+                <span class="btn">View Burndown Charts →</span>
+            </a>
+            
+            <a href="kanban.html" class="feature-card">
+                <div class="card-icon">📋</div>
+                <h3 class="card-title">Kanban Board</h3>
+                <p class="card-description">
+                    Interactive kanban board untuk tracking task progress dengan workflow: 
+                    Backlog → In Progress → In Review → Done.
+                </p>
+                <ul class="card-features">
+                    <li>6 Sprint Boards</li>
+                    <li>Story Cards dengan Priority</li>
+                    <li>Assignee Tracking</li>
+                    <li>Story Points Visibility</li>
+                </ul>
+                <span class="btn">Open Kanban Board →</span>
+            </a>
+            
+            <a href="backlog.html" class="feature-card">
+                <div class="card-icon">📝</div>
+                <h3 class="card-title">Product Backlog Items</h3>
+                <p class="card-description">
+                    Daftar lengkap 31 user stories dengan detail acceptance criteria, 
+                    estimasi, dependencies, dan prioritas.
+                </p>
+                <ul class="card-features">
+                    <li>31 User Stories</li>
+                    <li>Detailed Acceptance Criteria</li>
+                    <li>Story Point Estimation</li>
+                    <li>Definition of Done (DoD)</li>
+                </ul>
+                <span class="btn">View Product Backlog →</span>
+            </a>
+            
+            <a href="meetings.html" class="feature-card">
+                <div class="card-icon">📅</div>
+                <h3 class="card-title">Meeting Notes & Ceremonies</h3>
+                <p class="card-description">
+                    Template dan dokumentasi lengkap untuk semua Agile ceremonies: 
+                    Daily Standup, Sprint Planning, Review, dan Retrospective.
+                </p>
+                <ul class="card-features">
+                    <li>Daily Standup Templates</li>
+                    <li>Sprint Planning Agenda</li>
+                    <li>Retrospective Notes</li>
+                    <li>Release Planning</li>
+                </ul>
+                <span class="btn">View Meeting Notes →</span>
+            </a>
+        </div>
+    </div>
+    
+    <div class="project-info">
+        <div class="info-grid">
+            <div class="info-card">
+                <h2>📌 Project Overview</h2>
+                <p>
+                    PT P menghadapi permasalahan tingginya technical debt 
+                    dimana 60% waktu tim IT Development dihabiskan untuk debugging dan bug fixing. 
+                    Proyek ini bertujuan mengurangi proporsi waktu debugging menjadi kurang dari 20% 
+                    dalam 12 bulan melalui penguatan QA dan testing process.
+                </p>
+                
+                <h3>🎯 Key Objectives</h3>
+                <ul>
+                    <li>Mengurangi debugging time dari 60% menjadi &lt;20%</li>
+                    <li>Meningkatkan deployment success rate menjadi &gt;95%</li>
+                    <li>Menurunkan defect rate minimal 40%</li>
+                    <li>Implementasi test automation coverage &gt;70%</li>
+                    <li>Mempercepat time-to-market fitur baru 20-30%</li>
+                </ul>
+                
+                <h3>💡 Solution Approach</h3>
+                <ul>
+                    <li><strong>Shift-Left Testing:</strong> Mengintegrasikan QA sejak fase perencanaan</li>
+                    <li><strong>CI/CD Pipeline:</strong> Automated build, test, dan deployment</li>
+                    <li><strong>Automated Testing:</strong> Unit, integration, dan regression tests</li>
+                    <li><strong>DevSecOps:</strong> SAST/DAST scanning dalam pipeline</li>
+                    <li><strong>Quality Gates:</strong> Standar kualitas di setiap fase</li>
+                </ul>
+                
+                <h3>💰 Budget & ROI</h3>
+                <ul>
+                    <li>Investasi Awal: Rp 550.000.000</li>
+                    <li>Biaya Tahunan: Rp 250.000.000</li>
+                    <li>Payback Period: ~18 bulan</li>
+                    <li>ROI Tahun 3: ~62.5%</li>
+                </ul>
+            </div>
+            
+            <div class="info-card">
+                <h2>⏱️ Project Timeline</h2>
+                <ul class="timeline">
+                    <li>
+                        <div class="timeline-title">Sprint 1: Foundation</div>
+                        <div class="timeline-period">Mei - Jun 2026</div>
+                        <p style="font-size: 13px; margin-top: 8px; color: #7f8c8d;">
+                            CI/CD pipeline setup, QA tools onboarding, training batch 1
+                        </p>
+                    </li>
+                    <li>
+                        <div class="timeline-title">Sprint 2: Shift-Left</div>
+                        <div class="timeline-period">Jul - Ags 2026</div>
+                        <p style="font-size: 13px; margin-top: 8px; color: #7f8c8d;">
+                            Automated testing, SonarQube integration, code review workflow
+                        </p>
+                    </li>
+                    <li>
+                        <div class="timeline-title">Sprint 3: Security</div>
+                        <div class="timeline-period">Sep - Okt 2026</div>
+                        <p style="font-size: 13px; margin-top: 8px; color: #7f8c8d;">
+                            SAST/DAST scanning, integration tests, regression framework
+                        </p>
+                    </li>
+                    <li>
+                        <div class="timeline-title">Sprint 4: Performance</div>
+                        <div class="timeline-period">Nov - Des 2026</div>
+                        <p style="font-size: 13px; margin-top: 8px; color: #7f8c8d;">
+                            Performance & load testing, security hardening, training batch 2
+                        </p>
+                    </li>
+                    <li>
+                        <div class="timeline-title">Sprint 5: Monitoring</div>
+                        <div class="timeline-period">Jan - Feb 2027</div>
+                        <p style="font-size: 13px; margin-top: 8px; color: #7f8c8d;">
+                            Monitoring dashboard, DevSecOps pipeline, process improvement
+                        </p>
+                    </li>
+                    <li>
+                        <div class="timeline-title">Sprint 6: Closure</div>
+                        <div class="timeline-period">Mar - Apr 2027</div>
+                        <p style="font-size: 13px; margin-top: 8px; color: #7f8c8d;">
+                            UAT, final documentation, MOV measurement, project handover
+                        </p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <div class="project-info">
+        <div style="background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); text-align: center;">
+            <h2 style="color: #2c3e50; margin-bottom: 30px; font-size: 32px;">👥 2025SB - Kelompok 5 - The Luminalis</h2>
+            <p style="color: #7f8c8d; margin-bottom: 40px; font-size: 16px;">Fakultas Ilmu Komputer - Universitas Indonesia</p>
+            
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; max-width: 1200px; margin: 0 auto;">
+                <div style="text-align: center;">
+                    <div style="width: 120px; height: 120px; margin: 0 auto 15px; border-radius: 50%; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+                        <img src="https://i.imgur.com/BpZZDdV.png" alt="Rifka Uli Siregar" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22120%22 height=%22120%22%3E%3Crect fill=%22%23667eea%22 width=%22120%22 height=%22120%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-size=%2248%22 fill=%22white%22 font-family=%22Arial%22%3ERU%3C/text%3E%3C/svg%3E';">
+                    </div>
+                    <h4 style="color: #2c3e50; margin-bottom: 5px; font-size: 16px;">Rifka Uli Siregar</h4>
+                    <p style="color: #7f8c8d; font-size: 13px;">Project Manager</p>
+                </div>
+                
+                <div style="text-align: center;">
+                    <div style="width: 120px; height: 120px; margin: 0 auto 15px; border-radius: 50%; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+                        <img src="https://i.imgur.com/3QgNWED.png" alt="Salmadea Fahira Risyani" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22120%22 height=%22120%22%3E%3Crect fill=%22%239b59b6%22 width=%22120%22 height=%22120%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-size=%2248%22 fill=%22white%22 font-family=%22Arial%22%3ESF%3C/text%3E%3C/svg%3E';">
+                    </div>
+                    <h4 style="color: #2c3e50; margin-bottom: 5px; font-size: 16px;">Salmadea Fahira Risyani</h4>
+                    <p style="color: #7f8c8d; font-size: 13px;">Scrum Master</p>
+                </div>
+                
+                <div style="text-align: center;">
+                    <div style="width: 120px; height: 120px; margin: 0 auto 15px; border-radius: 50%; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+                        <img src="https://i.imgur.com/LL8kEkW.png" alt="Noni Elysa Norithi Omega"  style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22120%22 height=%22120%22%3E%3Crect fill=%22%23e74c3c%22 width=%22120%22 height=%22120%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-size=%2248%22 fill=%22white%22 font-family=%22Arial%22%3ENE%3C/text%3E%3C/svg%3E';">
+                    </div>
+                    <h4 style="color: #2c3e50; margin-bottom: 5px; font-size: 16px;">Noni Elysa Norithi Omega</h4>
+                    <p style="color: #7f8c8d; font-size: 13px;">QA Lead</p>
+                </div>
+                
+                <div style="text-align: center;">
+                    <div style="width: 120px; height: 120px; margin: 0 auto 15px; border-radius: 50%; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+                        <img src="https://i.imgur.com/TZB0lbF.jpeg" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22120%22 height=%22120%22%3E%3Crect fill=%22%2327ae60%22 width=%22120%22 height=%22120%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-size=%2248%22 fill=%22white%22 font-family=%22Arial%22%3EKL%3C/text%3E%3C/svg%3E';">
+                    </div>
+                    <h4 style="color: #2c3e50; margin-bottom: 5px; font-size: 16px;">Kania Lalita Krisnanto</h4>
+                    <p style="color: #7f8c8d; font-size: 13px;">Tech Lead</p>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    
+    <footer>
+        <div class="footer-container">
+            <p><strong>PT P QA Transformation Project</strong></p>
+            <p>PT P | Agile Project Management | 2026-2027</p>
+            <p style="margin-top: 10px; font-size: 12px;">
+                2025SB - Kelompok 5 - The Luminalis | Fakultas Ilmu Komputer UI | MPPTI 2025/2026
+            </p>
+        </div>
+    </footer>
+    
+    <script>
+        function toggleMobileMenu() {
+            const navLinks = document.querySelector(".nav-links");
+            navLinks.classList.toggle("mobile-open");
+        }
+        
+        document.addEventListener("click", function(event) {
+            const nav = document.querySelector("nav");
+            const navLinks = document.querySelector(".nav-links");
+            
+            if (!nav.contains(event.target) && navLinks.classList.contains("mobile-open")) {
+                navLinks.classList.remove("mobile-open");
+            }
+        });
+        
+        document.querySelectorAll(".nav-links a").forEach(link => {
+            link.addEventListener("click", function() {
+                document.querySelector(".nav-links").classList.remove("mobile-open");
+            });
+        });
+    </script>
+</body>
+</html>
